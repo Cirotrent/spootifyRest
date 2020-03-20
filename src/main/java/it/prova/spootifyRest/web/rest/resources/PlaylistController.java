@@ -50,7 +50,7 @@ public class PlaylistController {
 
 	@GetMapping("/dettaglio/{id}")
 	public ResponseEntity<PlaylistDTO> findById(@PathVariable Long id) {
-		PlayList playlist = playlistService.findByIdEager(id);
+		PlayList playlist = playlistService.findByIdPlaylistEagerBrani(id);
 		PlaylistDTO playlistDTO = PlaylistDTO.buildPlaylistDTOFromModel(playlist, false, false, true);
 
 		return ResponseEntity.status(200).body(playlistDTO);
@@ -82,8 +82,8 @@ public class PlaylistController {
 		if (!errors.isEmpty()) {
 			return ResponseEntity.status(406).body(new Message("I dati inseriti non sono corretti", errors));
 		}
-
-		PlayList playlist = PlaylistDTO.buildPlaylistModelFromDTO(playlistDTO, false, false, true);
+		
+		PlayList playlist = PlaylistDTO.buildPlaylistModelFromDTO(playlistDTO, false, false, false);
 		playlist.setId(id);
 		playlistService.aggiorna(playlist);
 

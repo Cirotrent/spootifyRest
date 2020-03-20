@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!-- <meta charset="ISO-8859-1"> -->
+<title>Insert title here</title>
+<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<script src="js/jquery-1.10.2.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/bootstrap.bundle.js"></script>
+		<script src="js/jqueryUI/jquery-ui.min.js"></script>
+		
+		
+	
+    
+    <!--$.ajax({-->
+<!--type: "GET", // Metodo di chiamata da effettuare-->
+<!--url: "https://jsonplaceholder.typicode.com/posts", // Url da chiamare-->
+<!--data: "id=" + idFromHtml + "&idAlbum="+idAlbum, //Eventuali parametri da passare NB: si posso scrivere anche in questo {idFromHtml: valore}-->
+<!--success: function (risposta) {-->
+<!--//Caso di success per esempio in risposta ho il risultato che mi torna il server-->
+<!--console.log(risposta);-->
+<!--$('#risposta').html(risposta);-->
+<!--},-->
+<!--error: function () {-->
+<!--//Caso di errore-->
+<!--alert("Chiamata fallita!!!");-->
+<!--}-->
+<!--});-->
+		
+</head>
+<body>
+	<div class="container">
+	
+
+		<form class="form-horizontal"	id="cercaId" style="visibility: visible">
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="tokenInputId">Token:</label>
+				<div class="col-sm-4">
+					<input class="form-control" type="text" id="tokenInputId"
+						name="token">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="playlistInputId">IdPlaylist:</label>
+				<div class="col-sm-4">
+					<input class="form-control" type="number" id="playlistInputId"
+						name="playlist">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="albumInputId">IdAlbum:</label>
+				<div class="col-sm-4">
+					<input class="form-control" type="number" id="albumInputId"
+						name="album">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" class="btn btn-primary btn-md" id="clickRicerca">Riproduci</button>
+
+				</div>
+			</div>
+		</form>
+
+<table class="table table-striped" id="my_table" style="visibility: hidden">
+  <thead>
+				<tr>
+					<th>Brano</th>
+					<th>Album</th>
+					<th>Stato</th>
+				</tr>
+			</thead>
+<!--   <tbody id="tbodytabella"> -->
+<!--   </tbody> -->
+</table>
+
+<div class="form-group" id= "optionId" style="visibility: hidden">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="button" class="btn btn-primary btn-md" id="clickPrevious">Previous</button>
+				<button type="button" class="btn btn-primary btn-md" id="clickCancella">Cancella riproduzione</button>
+				<button type="button" class="btn btn-primary btn-md" id="clickIndietro">Indietro</button>
+				<button type="button" class="btn btn-primary btn-md" id="clickNext">Next</button>
+			</div>
+		</div>
+
+	</div>
+	
+	<script type="text/javascript">
+	
+	
+	function creaTabella(risposta){
+		var brani;
+        
+		if(risposta.album != null){
+        	brani=risposta.album.brani;
+        	$.each(brani, function(key, val) {
+    		 	var tdTitolo = '<td>' + val.titolo + '</td>';
+    		 	var tdAlbum = '<td>' + risposta.album.titolo + '</td>';
+    		 	
+    			if(risposta.brano.id == val.id){
+    				var tdPlay = '<td style="font-weight: bold;">' + "in riproduzione" + '</td>';
+   			 		$('#my_table').append('<tr>'+  tdTitolo  + tdAlbum + tdPlay + '</tr>')
+   			 	}else{
+   			 		var tdPlay = '<td>' + "pronto" + '</td>';
+   			 		$('#my_table').append('<tr>' + tdTitolo  + tdAlbum + tdPlay + '</tr>')
+   			 		}
+                });
+        }
+        if(risposta.playList !=null){
+        	brani=risposta.playList.brani;
+        	$.each(brani, function(key, val) {
+    		 	var tdTitolo = '<td>' + val.titolo + '</td>';
+    		 	var tdPlaylist = '<td>' + risposta.playList.denominazione + '</td>';
+   			 	if(risposta.brano.id == val.id){
+   			 		var tdPlay = '<td>' + "in riproduzione" + '</td>';
+   			 		$('#my_table').append('<tr style="font-weight: bold;">'+  tdTitolo  + tdPlaylist + tdPlay + '</tr>')
+   			 	}else{
+   			 		var tdPlay = '<td>' + "pronto" + '</td>';
+   			 		$('#my_table').append('<tr>'+  tdTitolo  + tdPlaylist + tdPlay + '</tr>')
+   			 		}
+                });
+        }
+		
+	}
+
+        function doCall(typeRequest, pathUrl, parametri, callbackOnSuccess, callbackOnError) {
+
+            console.log("Inizio chiamata: ", pathUrl);
+			
+            $.ajax({
+                type: typeRequest, // Metodo di chiamata da effettuare
+                url: pathUrl, // Url da chiamare
+                data: JSON.stringify(parametri), //Eventuali parametri da passare NB: si posso scrivere anche in questo {idFromHtml: valore}
+                success: callbackOnSuccess,
+                error: callbackOnError,
+                headers: {
+                	"Content-Type":'application/json',
+                	'Accept': 'application/json',
+                	'token': parametri.token
+                }
+            });
+
+            console.log("Inizio chiamata: ", pathUrl);
+
+        }
+   
+ $("#clickRicerca").click(function (e) {
+            	
+                //Prendo le informazioni necessarie tramite JQuery
+                var tokenInInput = $('#tokenInputId').val();
+                var idAlbumInInput = $('#albumInputId').val();
+                var idPlaylistInImput = $('#playlistInputId').val();
+
+              doCall('POST', 'http://localhost:8080/riproduzione/ricerca', {token : tokenInInput,idPlaylist : idPlaylistInImput,idAlbum : idAlbumInInput}, function (risposta) {
+
+                        //ON SUCCESS
+
+        				//nascondo il form e rendo visibile la tabella e bottoni
+                        var table= document.getElementById('my_table');
+                        var option=document.getElementById('optionId');
+                        var form = document.getElementById('cercaId');
+                        table.setAttribute("style","visibility: visible");
+                        option.setAttribute("style","visibility: visible");
+                        form.setAttribute("style","visibility: hidden");
+                        var _tbody= document.createElement("tbody");
+                        $('#my_table').append(_tbody);
+                        creaTabella(risposta);
+                        
+                    },
+                    function (er) {
+                        // ERROR
+                       
+                        console.log(er.responseJSON.toString());
+                        alert(er.responseText);
+                        
+                    });
+                
+                return false;
+            });
+            
+ $("#clickNext").click(function (e) {
+            	
+                //Prendo le informazioni necessarie tramite JQuery
+                var tokenInInput = $('#tokenInputId').val();
+                var idAlbumInInput = $('#albumInputId').val();
+                var idPlaylistInImput = $('#playlistInputId').val();
+
+              doCall('POST', 'http://localhost:8080/riproduzione/next', {token : tokenInInput,idPlaylist : idPlaylistInImput,idAlbum : idAlbumInInput}, function (risposta) {
+
+                        //ON SUCCESS
+
+					var _table= document.getElementById('my_table');
+					var b = _table.getElementsByTagName("tbody");
+					_table.removeChild(b[0]);
+            	 	 var _tbody= document.createElement("tbody");
+                  	$('#my_table').append(_tbody);
+                  
+                 	creaTabella(risposta);
+                        
+                    },
+                    function (er) {
+                        // ERROR
+                        console.log(er.responseJSON.toString());
+                        alert(er.responseText);
+                        
+                    });
+                
+                return false;
+            });
+ 
+ $("#clickPrevious").click(function (e) {
+ 	
+     //Prendo le informazioni necessarie tramite JQuery
+     var tokenInInput = $('#tokenInputId').val();
+     var idAlbumInInput = $('#albumInputId').val();
+     var idPlaylistInImput = $('#playlistInputId').val();
+
+   doCall('POST', 'http://localhost:8080/riproduzione/previous', {token : tokenInInput,idPlaylist : idPlaylistInImput,idAlbum : idAlbumInInput}, function (risposta) {
+
+             //ON SUCCESS
+
+			var _table= document.getElementById('my_table');
+			var b = _table.getElementsByTagName("tbody");
+			_table.removeChild(b[0]);
+ 	 		 var _tbody= document.createElement("tbody");
+       		$('#my_table').append(_tbody);
+       
+      		creaTabella(risposta);
+             
+         },
+         function (er) {
+             // ERROR
+             console.log(er.responseJSON.toString());
+             alert(er.responseText);
+             
+         });
+     
+     return false;
+ });
+ 
+ $("#clickIndietro").click(function (e) {
+	 	var _table= document.getElementById('my_table');
+		var b = _table.getElementsByTagName("tbody");
+		_table.removeChild(b[0]);
+		
+		var table= document.getElementById('my_table');
+        var option=document.getElementById('optionId');
+        var form = document.getElementById('cercaId');
+        table.setAttribute("style","visibility: hidden");
+        option.setAttribute("style","visibility: hidden");
+        form.setAttribute("style","visibility: visible");
+		
+            
+ }); 
+ 
+ $("#clickCancella").click(function (e) {
+	 	
+     //Prendo le informazioni necessarie tramite JQuery
+     var tokenInInput = $('#tokenInputId').val();
+     var idAlbumInInput = $('#albumInputId').val();
+     var idPlaylistInImput = $('#playlistInputId').val();
+
+   doCall('POST', 'http://localhost:8080/riproduzione/cancellaRiproduzione', {token : tokenInInput,idPlaylist : idPlaylistInImput,idAlbum : idAlbumInInput}, function (risposta) {
+
+             //ON SUCCESS
+
+			var _table= document.getElementById('my_table');
+			var b = _table.getElementsByTagName("tbody");
+			_table.removeChild(b[0]);
+       
+       		var table= document.getElementById('my_table');
+            var option=document.getElementById('optionId');
+            var form = document.getElementById('cercaId');
+            table.setAttribute("style","visibility: hidden");
+            option.setAttribute("style","visibility: hidden");
+            form.setAttribute("style","visibility: visible");
+             
+         },
+         function (er) {
+             // ERROR
+             console.log(er.responseJSON.toString());
+             alert(er.responseText);
+             
+         });
+     
+     return false;
+ });
+ 
+
+    </script>
+</body>
+</html>

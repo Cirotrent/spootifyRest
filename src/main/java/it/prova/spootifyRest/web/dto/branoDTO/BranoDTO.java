@@ -11,11 +11,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.prova.spootifyRest.model.Brano;
 import it.prova.spootifyRest.model.PlayList;
 import it.prova.spootifyRest.model.Riproduzione;
-import it.prova.spootifyRest.model.Utente;
 import it.prova.spootifyRest.web.dto.albumDTO.AlbumDTO;
 import it.prova.spootifyRest.web.dto.playlistDTO.PlaylistDTO;
 import it.prova.spootifyRest.web.dto.riproduzioneDTO.RiproduzioneDTO;
-import it.prova.spootifyRest.web.dto.utenteDTO.UtenteDTO;
 
 public class BranoDTO {
 
@@ -130,12 +128,12 @@ public class BranoDTO {
 		}
 		return result;
 	}
-	
-public static List<BranoDTO> buildListFromModelList(List<Brano> input){
-		
-		List<BranoDTO> result= new ArrayList<BranoDTO>();
-		for(Brano branoItem: input) {
-			BranoDTO branoDTOtemp= BranoDTO.buildBranoDTOFromModel(branoItem, false, false, false);
+
+	public static List<BranoDTO> buildListFromModelList(List<Brano> input) {
+
+		List<BranoDTO> result = new ArrayList<BranoDTO>();
+		for (Brano branoItem : input) {
+			BranoDTO branoDTOtemp = BranoDTO.buildBranoDTOFromModel(branoItem, false, true, false);
 			result.add(branoDTOtemp);
 		}
 		return result;

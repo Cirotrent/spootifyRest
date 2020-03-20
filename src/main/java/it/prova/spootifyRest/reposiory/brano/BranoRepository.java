@@ -12,9 +12,9 @@ public interface BranoRepository extends CrudRepository<Brano, Long>, QueryByExa
 	@Query("select distinct b from Brano b left join fetch b.listaPlaylist p left join fetch b.album a where b.id = ?1")
 	Brano findByIdEagerPlaylistAlbum(Long id);
 	
-	@Query("select distinct b from Brano b join b.album a where a.id = ?1")
+	@Query("select distinct b from Brano b join fetch b.album a where a.id = ?1")
 	List<Brano> findAllBraniByIdAlbum(Long id);
 	
-	@Query("select distinct b from Brano b join b.listaPlaylist p where p.id = ?1")
+	@Query("select distinct b from Brano b join fetch b.album a join b.listaPlaylist p where p.id = ?1")
 	List<Brano> findAllBraniByIdPlaylist(Long id);
 }

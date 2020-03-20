@@ -8,12 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.spootifyRest.model.PlayList;
 import it.prova.spootifyRest.reposiory.playlist.PlaylistRepository;
+
 @Component
 public class PlaylistServiceImpl implements PlaylistService {
 
 	@Autowired
 	PlaylistRepository playlistRepository;
-	
+
 	@Transactional(readOnly = true)
 	public List<PlayList> listAllPlayList() {
 		return (List<PlayList>) playlistRepository.findAll();
@@ -27,13 +28,13 @@ public class PlaylistServiceImpl implements PlaylistService {
 	@Transactional
 	public void aggiorna(PlayList playListInstance) {
 		playlistRepository.save(playListInstance);
-		
+
 	}
 
 	@Transactional
 	public void inserisciNuova(PlayList playListInstance) {
 		playlistRepository.save(playListInstance);
-		
+
 	}
 
 	@Transactional
@@ -42,13 +43,13 @@ public class PlaylistServiceImpl implements PlaylistService {
 	}
 
 	@Transactional(readOnly = true)
-	public PlayList findByIdEager(Long id) {
-		return playlistRepository.findByIdEager(id);
+	public List<PlayList> findAllPlaylistByIdUtente(Long id) {
+		return playlistRepository.findAllPlaylistByIdUtente(id);
 	}
 
 	@Transactional(readOnly = true)
-	public List<PlayList> findAllPlaylistByIdUtente(Long id) {
-		return playlistRepository.findAllPlaylistByIdUtente(id);
+	public PlayList findByIdPlaylistEagerBrani(Long id) {
+		return playlistRepository.findByIdPlaylistEagerBrani(id);
 	}
 
 }

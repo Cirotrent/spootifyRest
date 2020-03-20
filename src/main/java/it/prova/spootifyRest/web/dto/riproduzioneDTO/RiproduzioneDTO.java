@@ -69,7 +69,7 @@ public class RiproduzioneDTO {
 		RiproduzioneDTO result = new RiproduzioneDTO();
 		result.setId(source.getId());
 		if (eagerAlbum) {
-			result.setAlbum(AlbumDTO.buildAlbumDTOFromModel(source.getAlbum(), false, false, false));
+			result.setAlbum(AlbumDTO.buildAlbumDTOFromModel(source.getAlbum(), false, false, true));
 		}
 
 		if (eagerUtente) {
@@ -77,7 +77,7 @@ public class RiproduzioneDTO {
 		}
 
 		if (eagerPlailist) {
-			result.setPlayList(PlaylistDTO.buildPlaylistDTOFromModel(source.getPlayList(), false, false, false));
+			result.setPlayList(PlaylistDTO.buildPlaylistDTOFromModel(source.getPlayList(), false, false, true));
 		}
 
 		if (eagerBrano) {

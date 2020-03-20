@@ -29,11 +29,11 @@ public class CheckAuthFilter implements Filter {
 	SessioneService sessioneService;
 
 	private static final String HOME_PATH = "";
-	private static final String[] EXCLUDED_URLS = { "/login/","/riproduzione/"};
+	private static final String[] EXCLUDED_URLS = { "/login/","/index","/index.html","/css","/js","/favicon.ico"};
 	private static final String[] PROTECTED_URLS = { "/admin/" };
 	private static final String[] PROTECTED_URLS_CUSTOMER = { "/customer/" };
 
-	@SuppressWarnings("unused")
+	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -78,7 +78,6 @@ public class CheckAuthFilter implements Filter {
 			// aggiorno la sessione
 			utenteInSession.getSessione().aggiornaData();
 			sessioneService.aggiorna(utenteInSession.getSessione());
-
 
 		}
 

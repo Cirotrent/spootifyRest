@@ -17,7 +17,7 @@ public interface PlaylistService {
 
 	public void rimuovi(PlayList playListInstance);
 	
-	public 	PlayList findByIdEager(Long id);
+	public PlayList findByIdPlaylistEagerBrani(Long id);
 	
 	public List<PlayList> findAllPlaylistByIdUtente(Long id);
 

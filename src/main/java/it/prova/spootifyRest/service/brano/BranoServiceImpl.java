@@ -53,7 +53,7 @@ public class BranoServiceImpl implements BranoService{
 
 	@Override
 	public List<Brano> findAllBraniByIdPlaylist(Long id) {
-		return branoRepository.findAllBraniByIdAlbum(id);
+		return branoRepository.findAllBraniByIdPlaylist(id);
 	}
 	
 	
