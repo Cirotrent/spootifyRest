@@ -19,7 +19,7 @@ public interface RiproduzioneService {
 
 	public void rimuovi(Riproduzione riproduzioneInstance);
 
-	public Riproduzione findRiproduzioneByRicDTO(RicercaDTO input);
+	public Riproduzione findOrCreateRiproduzioneByRicDTO(RicercaDTO input);
 
 	public Message controllo(RicercaDTO input);
 
@@ -27,7 +27,7 @@ public interface RiproduzioneService {
 	
 	public Riproduzione findByIdPlaylisteEUtente(Long idPlaylist, Long idUtente);
 	
-	public Riproduzione findRiproduzioneByRic(RicercaDTO input);
+	public Riproduzione findRiprByRicDTO(RicercaDTO input);
 	
 	public Riproduzione nextRiproduzione(RicercaDTO input); 
 	

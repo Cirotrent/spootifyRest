@@ -38,18 +38,11 @@ public class RiproduzioneController {
 		if (message != null) {
 			return ResponseEntity.status(406).body(message);
 		}
-		Riproduzione riproduzione = riproduzioneService.findRiproduzioneByRicDTO(ricercaDTO);
+		Riproduzione riproduzione = riproduzioneService.findOrCreateRiproduzioneByRicDTO(ricercaDTO);
 		if (riproduzione==null) {
 			return ResponseEntity.status(406).body(new RiproduzioneMessage("Album o playlist inesistenti!"));
 		}
-//		List<BranoDTO> braniDTO = BranoDTO.buildListFromModelList(brani);
-//		RiproduzioneDTO riproduzioneDTO= RiproduzioneDTO.buildRiproduzioneDTOFromModel(brani, true, true, true, true);
-		RiproduzioneDTO riproduzioneDTO = new RiproduzioneDTO();
-		if (ricercaDTO.getIdAlbum() == null) {
-			riproduzioneDTO = RiproduzioneDTO.buildRiproduzioneDTOFromModel(riproduzione, true, true, false, false);
-		} else {
-			riproduzioneDTO = RiproduzioneDTO.buildRiproduzioneDTOFromModel(riproduzione, false, true, true, false);
-		}
+		RiproduzioneDTO riproduzioneDTO = RiproduzioneDTO.creaDTOconAlbumOrPlaylist(riproduzione, ricercaDTO.getIdPlaylist()!=null);
 
 		return ResponseEntity.status(200).body(riproduzioneDTO);
 	}
@@ -58,12 +51,8 @@ public class RiproduzioneController {
 	public ResponseEntity<RiproduzioneDTO> next(@RequestBody RicercaDTO ricercaDTO) {
 		Riproduzione riproduzione = riproduzioneService.nextRiproduzione(ricercaDTO);
 		riproduzioneService.aggiorna(riproduzione);
-		RiproduzioneDTO riproduzioneDTO= new RiproduzioneDTO();
-		if (ricercaDTO.getIdAlbum() == null) {
-			riproduzioneDTO = RiproduzioneDTO.buildRiproduzioneDTOFromModel(riproduzione, true, true, false, false);
-		} else {
-			riproduzioneDTO = RiproduzioneDTO.buildRiproduzioneDTOFromModel(riproduzione, false, true, true, false);
-		}
+		RiproduzioneDTO riproduzioneDTO= RiproduzioneDTO.creaDTOconAlbumOrPlaylist(riproduzione, ricercaDTO.getIdPlaylist()!=null);
+		
 		return ResponseEntity.status(200).body(riproduzioneDTO);
 	}
 	
@@ -71,18 +60,14 @@ public class RiproduzioneController {
 	public ResponseEntity<RiproduzioneDTO> previous(@RequestBody RicercaDTO ricercaDTO) {
 		Riproduzione riproduzione = riproduzioneService.previousRiproduzione(ricercaDTO);
 		riproduzioneService.aggiorna(riproduzione);
-		RiproduzioneDTO riproduzioneDTO= new RiproduzioneDTO();
-		if (ricercaDTO.getIdAlbum() == null) {
-			riproduzioneDTO = RiproduzioneDTO.buildRiproduzioneDTOFromModel(riproduzione, true, true, false, false);
-		} else {
-			riproduzioneDTO = RiproduzioneDTO.buildRiproduzioneDTOFromModel(riproduzione, false, true, true, false);
-		}
+		RiproduzioneDTO riproduzioneDTO= RiproduzioneDTO.creaDTOconAlbumOrPlaylist(riproduzione, ricercaDTO.getIdPlaylist()!=null);
+
 		return ResponseEntity.status(200).body(riproduzioneDTO);
 	}
 	
 	@PostMapping("/cancellaRiproduzione")
 	public ResponseEntity<RiproduzioneMessage> cancellaRiproduzione(@RequestBody RicercaDTO ricercaDTO) {
-		Riproduzione riproduzione = riproduzioneService.findRiproduzioneByRic(ricercaDTO);
+		Riproduzione riproduzione = riproduzioneService.findRiprByRicDTO(ricercaDTO);
 		riproduzioneService.rimuovi(riproduzione);
 		return ResponseEntity.status(200).body(new RiproduzioneMessage("Riproduzione cancellata con successo"));
 	}

@@ -107,5 +107,18 @@ public class RiproduzioneDTO {
 		}
 		return result;
 	}
+	
+	/**
+	 * scelta: TRUE>> eagerPlaylist  FALSE>> eagerAlbum
+	 */
+	public static RiproduzioneDTO creaDTOconAlbumOrPlaylist(Riproduzione input, boolean scelta) {
+		RiproduzioneDTO riproduzioneDTO= new RiproduzioneDTO();
+		if (scelta) {
+			riproduzioneDTO = RiproduzioneDTO.buildRiproduzioneDTOFromModel(input, true, true, false, false);//playlist
+		} else {
+			riproduzioneDTO = RiproduzioneDTO.buildRiproduzioneDTOFromModel(input, false, true, true, false);//album
+		}
+		return riproduzioneDTO;
+	}
 
 }

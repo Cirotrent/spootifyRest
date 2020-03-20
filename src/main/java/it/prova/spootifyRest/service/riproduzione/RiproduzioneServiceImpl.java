@@ -83,7 +83,7 @@ public class RiproduzioneServiceImpl implements RiproduzioneService {
 		return riproduzioneRepository.findByIdPlaylisteEUtente(idPlaylist, idUtente);
 	}
 
-	public Riproduzione findRiproduzioneByRicDTO(RicercaDTO input) {
+	public Riproduzione findOrCreateRiproduzioneByRicDTO(RicercaDTO input) {
 		Utente utenteInSessione = utenteService.findByToken(input.getToken());
 		Riproduzione result = new Riproduzione();
 		if (input.getIdAlbum() != null && input.getIdPlaylist() == null) {
@@ -135,7 +135,7 @@ public class RiproduzioneServiceImpl implements RiproduzioneService {
 		return null;
 	}
 
-	public Riproduzione findRiproduzioneByRic(RicercaDTO input) {
+	public Riproduzione findRiprByRicDTO(RicercaDTO input) {
 		Utente utenteInSessione = utenteService.findByToken(input.getToken());
 		if (input.getIdAlbum() != null && input.getIdPlaylist() == null) {
 			return findByIdAlbumEUtente(input.getIdAlbum(), utenteInSessione.getId());
@@ -148,7 +148,7 @@ public class RiproduzioneServiceImpl implements RiproduzioneService {
 	}
 
 	public Riproduzione nextRiproduzione(RicercaDTO input) {
-		Riproduzione riproduzione = findRiproduzioneByRic(input);
+		Riproduzione riproduzione = findRiprByRicDTO(input);
 		List<Brano> brani = new ArrayList<Brano>();
 		if (input.getIdAlbum() != null) {
 			brani = riproduzione.getAlbum().getBrani();
@@ -170,7 +170,7 @@ public class RiproduzioneServiceImpl implements RiproduzioneService {
 	}
 	
 	public Riproduzione previousRiproduzione(RicercaDTO input) {
-		Riproduzione riproduzione = findRiproduzioneByRic(input);
+		Riproduzione riproduzione = findRiprByRicDTO(input);
 		List<Brano> brani = new ArrayList<Brano>();
 		if (input.getIdAlbum() != null) {
 			brani = riproduzione.getAlbum().getBrani();
