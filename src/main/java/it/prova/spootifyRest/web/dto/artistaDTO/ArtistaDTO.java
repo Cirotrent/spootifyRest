@@ -12,7 +12,7 @@ import it.prova.spootifyRest.model.Artista;
 import it.prova.spootifyRest.web.dto.albumDTO.AlbumDTO;
 
 public class ArtistaDTO {
-
+// test
 	private Long id;
 	@NotBlank(message = "Campo 'nome': non puo' essere lasciato vuoto!")
 	private String nome;
